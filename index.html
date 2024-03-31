@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Name Fetching</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</head>
+
+<style>
+    body {
+        background-image: url('https://www.worldatlas.com/r/w1200-q80/upload/a7/75/4a/shutterstock-130539758.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
+        min-height: 100vh;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-3"></div> <!-- This column will act as a spacer for medium and larger screens -->
+            <div class="col-12 col-md-6">
+                <div class="bg-white border border-success border-2 mb-5 p-5 rounded shadow">
+                    <h5 class="text-center text-success m-3">Country Display App</h5>
+                    <form>
+                        <input id="country" type="text" class="form-control mb-3" placeholder="Enter Country Name">
+                        <div class="text-center">
+                            <button type="button" onclick="searchData()" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-3"></div> <!-- This column will act as a spacer for medium and larger screens -->
+        </div>
+
+        <!-- Empty Div -->
+        <div id="result" class="row row-cols-md-1 row-cols-xl-2 row-cols-lg-2 shadow rounded-2 fw-medium mb-5">
+                   
+                  
+                
+        </div>
+    </div>
+
+    <script>
+        function searchData() {
+            var countryName = country.value; //India
+            console.log(countryName);
+            fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`)
+                .then(res => res.json()) //Array of data
+                .then(data => displayData(data)) //function call
+                .catch(error => {
+                    alert("Failed to fetch country details");
+                })
+        }
+
+        function displayData(data) {
+            for(i of data)
+        var keys=Object.keys(i.currencies)[0];   //keys of currencies
+        var lanarray=Object.values(i.languages); //languagees array
+        let str="";
+        lanarray.forEach(x=>str=str+x+" ");
+          
+        
+        output=`
+                 <h4 class="text-bg-success rounded-top text-center py-2 w-100 my-0" >Name of Country : ${i.name.common} &nbsp -  &nbsp  <span class="text-bg-success rounded-top text-center fs-5 ">Capital : ${i.capital}</span>  </h4><br>
+                                              
+                <div class="col text-center bg-white pt-2 px-2">
+                 <img class="img-fluid " style="max-width:300px; max-height:300px; object-fit:cover;" src="${i.flags.svg}" alt="">
+                 <p class="text-dark fs-6 fw-medium pt-3 px-2">${i.flags.alt}</p>               
+                 
+                                  
+                </div>
+
+                 <div class="col text-center bg-white pt-2 ">
+                  <img class="img-fluid"  style="max-width:300px; max-height:180px; object-fit:cover;" src="${i.coatOfArms.svg}" alt="">
+                  <p class="text-dark fs-6 fw-medium pt-2 ">Region : <span class="text-primary"> ${i.region}</span>
+                    <p class="text-dark fs-6 fw-medium "> Population : <span class="text-primary"> ${i.population}</span></p> 
+                   <p class="text-dark fs-6 fw-medium  "> Currency : <span class="text-primary">  ${(i.currencies[keys]).name} &nbsp &nbsp ${(i.currencies[keys]).symbol}</span> </p>
+                    <p class="text-dark fs-6 fw-medium   ">Languages Spoken : <span class="text-primary ">${str}</span></p></p>
+                 </div>`
+        result.innerHTML= output;  
+        }
+    </script>
+</body>
+
+</html>
